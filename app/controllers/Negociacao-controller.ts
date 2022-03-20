@@ -1,3 +1,4 @@
+import { DiasDaSemana } from "../enumerations/dias-da-semana.js";
 import { Negociacao } from "../models/Negociacao.js";
 import { Negociacoes } from "../models/Negociacoes.js";
 import { mensagemView } from "../views/mensagem-view.js";
@@ -29,16 +30,28 @@ export class NegociacaoController
     {
 
         const negociacao = this.criarNegociacao(); 
-        this.listaNegociacoes.adiciona(negociacao);
 
-        this.negociacoesView.update(this.listaNegociacoes);
+        if( !this.ehDiaUtil(negociacao.data) )
+        {
+            this.mensagemView.update('Apenas dias úteis são aceito.');  
+            return;
+        }   
+        
+        this.listaNegociacoes.adiciona(negociacao);
         this.mensagemView.update("Negociação adicionada com sucesso!");
 
+        this.chamarUpdate();
         this.limparForm();
 
     }
 
-    public criarNegociacao(): Negociacao
+    private ehDiaUtil(data: Date): boolean
+    {
+        return data.getDay() > DiasDaSemana.SABADO 
+            && data.getDay() < DiasDaSemana.DOMINGO;
+    }
+
+    private criarNegociacao(): Negociacao
     {
         const data = new Date(this.inputData.value.replace(/-/g, ','));
 
@@ -49,7 +62,7 @@ export class NegociacaoController
         return new Negociacao(data, quantidade, valor);
     }
 
-    public limparForm(): void
+    private limparForm(): void
     {
         this.inputData.value = '';
         this.inputQuantidade.value = '';
@@ -57,5 +70,10 @@ export class NegociacaoController
 
         this.inputData.focus();
 
+    }
+
+    private chamarUpdate(): void
+    {
+        this.negociacoesView.update(this.listaNegociacoes);        
     }
 }
