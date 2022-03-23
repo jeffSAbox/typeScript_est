@@ -16,4 +16,7 @@ export class Negociacao {
     get volume() {
         return this._quantidade * this._valor;
     }
+    static criaDe(data, quantidade, valor) {
+        return new Negociacao(data, quantidade, valor);
+    }
 }
