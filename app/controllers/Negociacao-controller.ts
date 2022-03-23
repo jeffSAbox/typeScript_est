@@ -12,7 +12,7 @@ export class NegociacaoController
 
     private listaNegociacoes: Negociacoes;
 
-    private negociacoesView = new negociacoesView("#listaNegociacoes");
+    private negociacoesView = new negociacoesView("#listaNegociacoes", true);
     private mensagemView = new mensagemView('#mensagemView');
 
     public constructor()
@@ -32,7 +32,7 @@ export class NegociacaoController
         const data = new Date(this.inputData.value.replace(/-/g, ','));
         const valor = parseFloat(this.inputValor.value);
         const quantidade = parseInt(this.inputQuantidade.value);
-        
+
         const negociacao = Negociacao.criaDe(
             data,
             quantidade,
